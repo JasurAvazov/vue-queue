@@ -3,21 +3,48 @@
 		<div class="card" v-for="(card, index) in cards" :key="index">
 			<h2 class="card-title">{{ card.title }}</h2>
 			<p class="card-description">{{ card.description }}</p>
-            <button class="card-btn" type="submit">Взять очередь</button>
+			<button class="card-btn" @click="addToQueue(card)">Взять очередь</button>
 		</div>
 	</div>
 </template>
 
 <script>
+import { db } from "@/firebase.js";
+
 export default {
 	data() {
 		return {
 			cards: [
-				{ title: "Загранпаспорт ", description: "Улети отсюда" },
-				{ title: "Стать президентом", description: "Стать президентом за один клик. бесплатно" },
-				{ title: "Проверка", description: "Проверка на наличие болезней" },
+				{
+					title: "Загранпаспорт ",
+					description: "Улети отсюда",
+				},
+				{
+					title: "Стать президентом",
+					description: "Стать президентом за один клик. бесплатно",
+				},
+				{
+					title: "Проверка",
+					description: "Проверка на наличие болезней",
+				},
 			],
 		};
+	},
+	methods: {
+		addToQueue(card) {
+			const queueCollection = collection(db, "queue");
+
+			addDoc(queueCollection, {
+				cardTitle: card.title,
+				createdAt: serverTimestamp(),
+			})
+				.then(() => {
+					console.log("Queue number added successfully!");
+				})
+				.catch((error) => {
+					console.error("Error adding queue number: ", error);
+				});
+		},
 	},
 };
 </script>
@@ -35,23 +62,23 @@ export default {
 	padding: 1.5rem;
 	border: 1px dashed #ccc;
 	border-radius: 4px;
-    &-title{
-        font-size: 28px;
-        margin-bottom: 1rem;
-    }
-    &-description{
-        font-size: 16px;
-        margin-bottom: 2rem;
-    }
-    &-btn{
-        padding: 10px 15px;
-        font-size: 16px;
-        font-weight: 500;
-        background-color: #156d24;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        outline: none;
-    }
+	&-title {
+		font-size: 20px;
+		margin-bottom: 0.8rem;
+	}
+	&-description {
+		font-size: 16px;
+		margin-bottom: 2rem;
+	}
+	&-btn {
+		padding: 10px 15px;
+		font-size: 16px;
+		font-weight: 500;
+		background-color: #156d24;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		outline: none;
+	}
 }
 </style>

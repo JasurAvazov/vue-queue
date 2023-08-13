@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="container">
-      <h1 class="title">Выберите услугу</h1>
+      <h2 class="title">Выберите услугу</h2>
       <Cards />
     </div>
   </div>
@@ -20,8 +20,8 @@ export default {
 
 <style lang="scss" scoped>
 .title{
-  font-style: 32px;
+  font-style: 22px;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 </style>

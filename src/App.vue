@@ -1,10 +1,18 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
+  <Header />
   <router-view/>
 </template>
+
+<script>
+import Header from "./components/Header.vue"
+
+export default {
+  name: 'App',
+  components: {
+    Header
+  }
+}
+</script>
 
 <style lang="scss">
 *{
@@ -29,5 +37,8 @@ button{
   outline: none;
   border: none;
   cursor: pointer;
+}
+a{
+  text-decoration: none;
 }
 </style>
