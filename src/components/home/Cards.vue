@@ -31,22 +31,6 @@ export default {
 			],
 		};
 	},
-	methods: {
-		// addToQueue(card) {
-		// 	const queueCollection = collection(db, "queue");
-
-		// 	addDoc(queueCollection, {
-		// 		cardTitle: card.title,
-		// 		createdAt: serverTimestamp(),
-		// 	})
-		// 		.then(() => {
-		// 			console.log("Queue number added successfully!");
-		// 		})
-		// 		.catch((error) => {
-		// 			console.error("Error adding queue number: ", error);
-		// 		});
-		// },
-	},
 };
 </script>
 
