@@ -3,7 +3,9 @@
 		<div class="card" v-for="(card, index) in cards" :key="index">
 			<h2 class="card-title">{{ card.title }}</h2>
 			<p class="card-description">{{ card.description }}</p>
-			<button class="card-btn" @click="addToQueue(card)">Взять очередь</button>
+			<button class="card-btn" @click="addToQueue(card.title)">
+				Взять очередь
+			</button>
 		</div>
 	</div>
 </template>
@@ -31,8 +33,8 @@ export default {
 		};
 	},
 	methods: {
-		addToQueue(card) {
-			this.$store.dispatch("queue/addItem");
+		addToQueue(title) {
+			this.$store.dispatch("queue/addItem", title);
 		},
 	},
 };

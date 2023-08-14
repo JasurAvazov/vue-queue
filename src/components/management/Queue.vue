@@ -6,10 +6,9 @@
                 <div class="info">
 				    <h3>{{ item.number }}</h3>
                     <p>{{ item.created_at }}</p>
+                    <p>{{ item.branch }}</p>
                 </div>
-				<button class="delete" type="button" @click="deleteItem(item.id)">
-					Удалить
-				</button>
+                <button class="delete" type="button" @click="deleteItem(item.id)">Удалить</button>
 			</div>
 		</div>
 	</div>
@@ -30,6 +29,7 @@ const fetchItems = async () => {
 onMounted(fetchItems);
 
 const deleteItem = async (itemId) => {
+    console.log("Deleting item with itemId:", itemId);
 	await store.dispatch("queue/deleteItem", itemId);
 	await fetchItems();
 };
