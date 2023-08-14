@@ -3,21 +3,20 @@
 		<div class="card" v-for="(card, index) in cards" :key="index">
 			<h2 class="card-title">{{ card.title }}</h2>
 			<p class="card-description">{{ card.description }}</p>
-			<button class="card-btn">Взять очередь</button>
-			<!-- <button class="card-btn" @click="addToQueue(card)">Взять очередь</button> -->
+			<button class="card-btn" @click="addToQueue(card)">Взять очередь</button>
 		</div>
 	</div>
 </template>
 
 <script>
-import db from "../../firebase.js";
+import { useStore } from "vuex";
 
 export default {
 	data() {
 		return {
 			cards: [
 				{
-					title: "Загранпаспорт ",
+					title: "Загранпаспорт",
 					description: "Улети отсюда",
 				},
 				{
@@ -30,6 +29,11 @@ export default {
 				},
 			],
 		};
+	},
+	methods: {
+		addToQueue(card) {
+			this.$store.dispatch("queue/addItem");
+		},
 	},
 };
 </script>

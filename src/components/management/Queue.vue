@@ -3,7 +3,10 @@
 		<h2 class="queue-title">Очередь</h2>
 		<div class="queue__items">
 			<div class="queue__item" v-for="item in reversedItems" :key="item.id">
-				<h3>{{ item.number }}</h3>
+                <div class="info">
+				    <h3>{{ item.number }}</h3>
+                    <p>{{ item.created_at }}</p>
+                </div>
 				<button class="delete" type="button" @click="deleteItem(item.id)">
 					Удалить
 				</button>
@@ -82,5 +85,11 @@ watchEffect(() => {
 		border-radius: 4px;
 		color: white;
 	}
+    .info{
+        display: flex;
+        justify-content: flex-start;
+        align-content: center;
+        gap: 40px;
+    }
 }
 </style>

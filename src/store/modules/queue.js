@@ -1,43 +1,50 @@
-import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
+import { ref, onMounted } from "vue";
 import { db } from "../../firebase.js";
+import { collection, addDoc, deleteDoc, getDocs, query, orderBy } from "firebase/firestore";
 
 const state = {
-	items: [],
+  currentNumber: 1,
+  items: []
 };
 
 const mutations = {
-	setItems(state, items) {
-		state.items = items;
-	},
-	removeItem(state, itemId) {
-		state.items = state.items.filter((item) => item.id !== itemId);
-	},
+  incrementNumber(state) {
+    state.currentNumber = (state.currentNumber % 99) + 1;
+  },
+  setItems(state, items) {
+    state.items = items;
+  }
 };
 
 const actions = {
-	async fetchItems({ commit }) {
-		const queueC = await getDocs(collection(db, "queue"));
-		const items = queueC.docs.map((el) => ({ ...el.data(), id: el.id }));
-		commit("setItems", items);
-	},
-	async deleteItem({ commit }, itemId) {
-		try {
-			await deleteDoc(doc(db, "queue", itemId));
-			commit("removeItem", itemId);
-		} catch (error) {
-			console.error("Error deleting item:", error);
-		}
-	},
+  async fetchItems({ commit }) {
+    const q = query(collection(db, "queue"), orderBy("created_at"));
+    const querySnapshot = await getDocs(q);
+    const items = querySnapshot.docs.map((doc) => doc.data());
+    commit("setItems", items);
+  },
+  async addItem({ commit, state }) {
+    const newItem = {
+      number: state.currentNumber,
+      created_at: new Date().toISOString()
+    };
+    await addDoc(collection(db, "queue"), newItem);
+    commit("incrementNumber");
+  },
+  async deleteItem({ commit }, itemId) {
+    await deleteDoc(doc(db, "queue", itemId));
+    commit("fetchItems");
+  }
 };
 
 const getters = {
-	getItems: (state) => state.items,
+  getItems: (state) => state.items
 };
 
 export default {
-	namespaced: true,
-	state,
-	mutations,
-	actions,
-	getters,
+  namespaced: true,
+  state,
+  mutations,
+  actions,
+  getters
 };
