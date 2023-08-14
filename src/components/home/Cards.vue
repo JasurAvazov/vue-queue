@@ -3,13 +3,14 @@
 		<div class="card" v-for="(card, index) in cards" :key="index">
 			<h2 class="card-title">{{ card.title }}</h2>
 			<p class="card-description">{{ card.description }}</p>
-			<button class="card-btn" @click="addToQueue(card)">Взять очередь</button>
+			<button class="card-btn">Взять очередь</button>
+			<!-- <button class="card-btn" @click="addToQueue(card)">Взять очередь</button> -->
 		</div>
 	</div>
 </template>
 
 <script>
-import { db } from "@/firebase.js";
+import db from "../../firebase.js";
 
 export default {
 	data() {
@@ -31,20 +32,20 @@ export default {
 		};
 	},
 	methods: {
-		addToQueue(card) {
-			const queueCollection = collection(db, "queue");
+		// addToQueue(card) {
+		// 	const queueCollection = collection(db, "queue");
 
-			addDoc(queueCollection, {
-				cardTitle: card.title,
-				createdAt: serverTimestamp(),
-			})
-				.then(() => {
-					console.log("Queue number added successfully!");
-				})
-				.catch((error) => {
-					console.error("Error adding queue number: ", error);
-				});
-		},
+		// 	addDoc(queueCollection, {
+		// 		cardTitle: card.title,
+		// 		createdAt: serverTimestamp(),
+		// 	})
+		// 		.then(() => {
+		// 			console.log("Queue number added successfully!");
+		// 		})
+		// 		.catch((error) => {
+		// 			console.error("Error adding queue number: ", error);
+		// 		});
+		// },
 	},
 };
 </script>

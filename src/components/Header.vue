@@ -6,7 +6,7 @@
             </router-link>
 			<nav>
 				<router-link to="/">Главная</router-link>
-				<router-link to="/about">О нас</router-link>
+				<router-link to="/management">Режим менеджера</router-link>
 			</nav>
 		</div>
 	</header>
@@ -34,9 +34,12 @@
         align-content: center;
         justify-content: flex-start;
         gap: 20px;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+        a{
+            color: #a56947;
+            background-color: white;
+            padding: 10px;
+            border-radius: 4px;
+        }
     }
     margin-bottom: 2rem;
 }
