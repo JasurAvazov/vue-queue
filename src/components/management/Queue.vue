@@ -8,7 +8,7 @@
                     <p>{{ item.created_at }}</p>
                     <p>{{ item.branch }}</p>
                 </div>
-                <button class="delete" type="button" @click="deleteItem(item.id)">Удалить</button>
+                <button class="delete" type="button" @click="deleteItem(item.id)">Снять с очереди</button>
 			</div>
 		</div>
 	</div>
