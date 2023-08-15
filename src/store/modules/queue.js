@@ -1,93 +1,105 @@
 import { db } from "../../firebase.js";
 import {
-  collection,
-  addDoc,
-  deleteDoc,
-  getDocs,
-  query,
-  orderBy,
-  doc,
-  getDoc,
-  setDoc,
+	collection,
+	addDoc,
+	deleteDoc,
+	getDocs,
+	query,
+	orderBy,
+	doc,
+	getDoc,
+	setDoc,
 } from "firebase/firestore";
 
 const state = {
-  currentNumber: 1,
-  items: [],
-  branchReports: {},
+	updatingNumber: false,
+	currentNumber: 1,
+	items: [],
+	branchReports: {},
 };
 
 const mutations = {
-  updateBranchReport(state, title) {
-    if (!state.branchReports[title]) {
-      state.branchReports[title] = [];
-    }
-    state.branchReports[title].push(state.currentNumber - 1);
-  },
-  setCurrentNumber(state, number) {
-    state.currentNumber = number;
-    localStorage.setItem("currentNumber", state.currentNumber);
-  },
-  setItems(state, items) {
-    state.items = items;
-  },
+	updateBranchReport(state, title) {
+		if (!state.branchReports[title]) {
+			state.branchReports[title] = [];
+		}
+		state.branchReports[title].push(state.currentNumber - 1);
+	},
+	setCurrentNumber(state, number) {
+		state.currentNumber = number;
+		localStorage.setItem("currentNumber", state.currentNumber);
+	},
+	setItems(state, items) {
+		state.items = items;
+	},
+	setUpdatingNumber(state, updating) {
+		state.updatingNumber = updating;
+	},
 };
 
 const actions = {
-  async fetchItems({ commit }) {
-    const q = query(collection(db, "queue"), orderBy("created_at"));
-    const querySnapshot = await getDocs(q);
-    const items = querySnapshot.docs.map((doc) => {
-      return { id: doc.id, ...doc.data() };
-    });
-    commit("setItems", items);
-  },
+	async fetchItems({ commit }) {
+		const q = query(collection(db, "queue"), orderBy("created_at"));
+		const querySnapshot = await getDocs(q);
+		const items = querySnapshot.docs.map((doc) => {
+			return { id: doc.id, ...doc.data() };
+		});
+		commit("setItems", items);
+	},
 
-  async fetchCurrentNumber({ commit }) {
-    const docRef = doc(db, "settings", "currentNumber");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      commit("setCurrentNumber", docSnap.data().value);
+	async fetchCurrentNumber({ commit }) {
+		const docRef = doc(db, "settings", "currentNumber");
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			commit("setCurrentNumber", docSnap.data().value);
+		}
+	},
+
+	async updateCurrentNumber({ commit, state }) {
+		const docRef = doc(db, "settings", "currentNumber");
+		await setDoc(docRef, { value: state.currentNumber });
+	},
+
+	async addItem(context, title) { // Здесь исправляем параметр
+    if (context.state.updatingNumber) {
+      return; // Если обновление уже выполняется, выход из функции
     }
-  },
 
-  async updateCurrentNumber({ state }) {
-    const docRef = doc(db, "settings", "currentNumber");
-    await setDoc(docRef, { value: state.currentNumber });
-  },
+    await context.dispatch("fetchCurrentNumber");
+    context.commit("setUpdatingNumber", true);
 
-  async addItem({ dispatch, state }, title) {
-    await dispatch("fetchCurrentNumber");
     const newItem = {
-      number: state.currentNumber,
+      number: context.state.currentNumber,
       created_at: new Date().toISOString(),
       branch: title,
     };
-    await addDoc(collection(db, "queue"), newItem);
-    state.currentNumber++;
-    await dispatch("updateCurrentNumber");
-    await dispatch("fetchItems");
+    await addDoc(collection(db, title), newItem); // Используем title в качестве имени коллекции
+    context.state.currentNumber++;
+    await context.dispatch("updateCurrentNumber");
+    await context.dispatch("fetchItems");
+
+    context.commit("setUpdatingNumber", false);
   },
 
-  async deleteItem({ dispatch }, itemId) {
-    try {
-      await deleteDoc(doc(db, "queue", itemId));
-      await dispatch("fetchItems");
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  },
+	async deleteItem({ dispatch }, itemId) {
+		try {
+			await deleteDoc(doc(db, "queue", itemId));
+			await dispatch("fetchItems");
+		} catch (error) {
+			console.error("Error deleting item:", error);
+		}
+	},
 };
 
 const getters = {
-  getItems: (state) => state.items,
-  getBranchReports: (state) => state.branchReports,
+	getItems: (state) => state.items,
+	getBranchReports: (state) => state.branchReports,
 };
 
 export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters,
+	namespaced: true,
+	state,
+	mutations,
+	actions,
+	getters,
 };

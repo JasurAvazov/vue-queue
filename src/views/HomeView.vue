@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Cards from "../components/home/Cards.vue";
+import Cards from "../components/home/Services.vue";
 
 export default {
 	name: "HomeView",
