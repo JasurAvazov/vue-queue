@@ -1,5 +1,5 @@
 const state = {
-	loggedIn: false, // Добавляем loggedIn в состояние
+	loggedIn: false,
 };
 
 const mutations = {

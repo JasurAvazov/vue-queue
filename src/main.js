@@ -7,5 +7,5 @@ import LoginModal from './components/LoginModal.vue';
 const app = createApp(App);
 app.use(store);
 app.use(router);
-app.component('LoginModal', LoginModal); // Регистрируем компонент
+app.component('LoginModal', LoginModal);
 app.mount('#app');

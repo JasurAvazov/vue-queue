@@ -24,7 +24,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  const loggedIn = store.state.log.loggedIn; // Используйте правильное свойство loggedIn
+  const loggedIn = store.state.log.loggedIn;
 
   if (requiresAuth && !loggedIn) {
     next("/");
