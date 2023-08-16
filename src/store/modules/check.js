@@ -78,7 +78,11 @@ const actions = {
 	
 			const newNumber = (state.checkNumber % 99) + 1;
 			const docRef = await addDoc(collection(db, "check"), newItem);
-			newItemNumber = newNumber;
+			newItemNumber = newNumber-1;
+
+			if (newNumber === 1) {
+				newItemNumber = 99;
+			}
 	
 			await setDoc(doc(db, "settings", "checkNumber"), { value: newNumber });
 	

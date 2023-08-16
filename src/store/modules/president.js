@@ -63,11 +63,11 @@ const actions = {
 
   async addItem({ commit, state, dispatch }, branch) {
 		if (state.addingItem) {
-			return;
+			return null;
 		}
 		state.addingItem = true;
 	
-		let newItemId;
+		let newItemNumber = null;
 	
 		try {
 			await dispatch("fetchPresidentNumber");
@@ -79,16 +79,22 @@ const actions = {
 	
 			const newNumber = (state.presidentNumber % 99) + 1;
 			const docRef = await addDoc(collection(db, "president"), newItem);
-			newItemId = docRef.id;
+			newItemNumber = newNumber-1;
+
+			if (newNumber === 1) {
+				newItemNumber = 99;
+			}
 	
 			await setDoc(doc(db, "settings", "presidentNumber"), { value: newNumber });
 	
 			commit("setPresidentNumber", newNumber);
 			await dispatch("fetchItems");
-      
+			
 		} finally {
 			state.addingItem = false;
 		}
+	
+		return newItemNumber;
 	},
 
   async deleteItem({ dispatch }, itemId) {

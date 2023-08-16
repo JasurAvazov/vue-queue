@@ -43,6 +43,7 @@ export default {
 			addingToQueue: false,
 			showingModal: false,
 			newItemNumber: null,
+			loaded: false, // Добавьте это поле
 		};
 	},
 	components: {
