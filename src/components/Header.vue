@@ -55,6 +55,7 @@ export default {
 		background-color: white;
 		padding: 10px;
 		border-radius: 4px;
+        font-size: 16px;
 	}
 	&-logo {
 		font-size: 22px;
@@ -74,6 +75,7 @@ export default {
 			background-color: white;
 			padding: 10px;
 			border-radius: 4px;
+            font-size: 16px;
 		}
 	}
 	margin-bottom: 2rem;

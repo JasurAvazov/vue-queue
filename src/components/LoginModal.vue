@@ -2,6 +2,7 @@
 	<div class="login__modal">
 		<div class="login__modal-bg" @click="closeLoginModal"></div>
 		<div class="login__modal-inner">
+      <p>*пароль и логин admin</p>
 			<input class="login__modal-input" v-model="username" placeholder="Логин" />
 			<input class="login__modal-input" v-model="password" type="password" placeholder="Пароль" />
 			<button @click="login">Войти</button>
