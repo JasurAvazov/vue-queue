@@ -6,7 +6,6 @@
 				<div class="info">
 					<h3>{{ item.number }}</h3>
 					<p>{{ item.created_at }}</p>
-					<p>{{ item.branch }}</p>
 				</div>
 				<button class="delete" type="button" @click="deleteItem(item.id)">
 					Снять с очереди
