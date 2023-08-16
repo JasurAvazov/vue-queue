@@ -7,7 +7,6 @@
 			<nav>
 				<router-link to="/">Главная</router-link>
 				<router-link to="/management">Режим менеджера</router-link>
-                <!-- <router-link to="/login">Вход</router-link> -->
 			</nav>
 		</div>
 	</header>
