@@ -1,6 +1,6 @@
 <template>
-	<div class="queue container">
-		<h2 class="queue-title">Очередь</h2>
+	<div class="queue container" v-if="reversedItems.length > 0">
+		<h2 class="queue-title">Очередь на проверку</h2>
 		<div class="queue__items">
 			<div class="queue__item" v-for="item in reversedItems" :key="item.id">
 				<div class="info">
@@ -14,6 +14,12 @@
 			</div>
 		</div>
 	</div>
+	<div class="queue container" v-else>
+		<h2 class="queue-title">Очередь на проверку</h2>
+		<div class="empty">
+			пусто
+		</div>
+	</div>
 </template>
 
 <script setup>
@@ -24,15 +30,15 @@ const store = useStore();
 const items = ref([]);
 
 const fetchItems = async () => {
-	await store.dispatch("queue/fetchItems");
-	items.value = store.getters["queue/getItems"];
+	await store.dispatch("check/fetchItems");
+	items.value = store.getters["check/getItems"];
 };
 
 onMounted(fetchItems);
 
 const deleteItem = async (itemId) => {
 	console.log("Deleting item with itemId:", itemId);
-	await store.dispatch("queue/deleteItem", itemId);
+	await store.dispatch("check/deleteItem", itemId);
 	await fetchItems();
 };
 
@@ -46,6 +52,17 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 .queue {
+	margin-bottom: 4rem;
+	.empty{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 100px 60px;
+		background-color: #f2f2f2;
+		border-radius: 4px;
+		color: #ccc;
+		font-size: 18px;
+	}
 	&__items {
 		display: flex;
 		flex-direction: column;

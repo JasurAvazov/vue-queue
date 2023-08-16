@@ -3,15 +3,22 @@
 		<div class="card" v-for="(card, index) in cards" :key="index">
 			<h2 class="card-title">{{ card.title }}</h2>
 			<p class="card-description">{{ card.description }}</p>
-			<button class="card-btn" @click="addToQueue(card.title)">
+			<button class="card-btn" @click="showModal(card.branch)">
 				Взять очередь
 			</button>
 		</div>
+
+		<queue-modal
+			v-if="showingModal"
+			:newItemNumber="newItemNumber"
+			:loaded="loaded"
+			@close="closeModal"
+		/>
 	</div>
 </template>
 
 <script>
-import { useStore } from "vuex";
+import QueueModal from "./QueueModal.vue";
 
 export default {
 	data() {
@@ -20,21 +27,51 @@ export default {
 				{
 					title: "Загранпаспорт",
 					description: "Улети отсюда",
+					branch: "passport",
 				},
 				{
 					title: "Стать президентом",
 					description: "Стать президентом за один клик. бесплатно",
+					branch: "president",
 				},
 				{
 					title: "Проверка",
 					description: "Проверка на наличие болезней",
+					branch: "check",
 				},
 			],
+			addingToQueue: false,
+			showingModal: false,
+			newItemNumber: null,
 		};
 	},
+	components: {
+		QueueModal,
+	},
 	methods: {
-		addToQueue(title) {
-			this.$store.dispatch("queue/addItem", title);
+		async showModal(branch) {
+			if (this.addingToQueue) {
+				return;
+			}
+			this.addingToQueue = true;
+			this.loaded = false;
+			this.showingModal = true;
+
+			let newItemNumber = null;
+
+			try {
+				newItemNumber = await this.$store.dispatch(`${branch}/addItem`, branch);
+				this.loaded = true;
+			} finally {
+				this.addingToQueue = false;
+			}
+
+			if (newItemNumber !== null) {
+				this.newItemNumber = newItemNumber;
+			}
+		},
+		closeModal() {
+			this.showingModal = false;
 		},
 	},
 };

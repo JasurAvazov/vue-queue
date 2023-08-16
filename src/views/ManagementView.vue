@@ -1,16 +1,22 @@
 <template>
   <div class="management">
-    <Queue />
+    <Passport />
+    <President />
+    <Check />
   </div>
 </template>
 
 <script>
-import Queue from "../components/management/Queue.vue";
+import Passport from "../components/management/Passport.vue";
+import President from "../components/management/President.vue";
+import Check from "../components/management/Check.vue";
 
 export default {
   name: 'ManagementView',
   components: {
-    Queue
+    Passport,
+    President,
+    Check,
   }
 }
 </script>

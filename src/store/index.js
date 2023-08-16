@@ -1,8 +1,12 @@
 import { createStore } from "vuex";
-import queue from "./modules/queue";
+import passport from "./modules/passport";
+import president from "./modules/president";
+import check from "./modules/check";
 
 export default createStore({
   modules: {
-    queue
+    passport,
+    president,
+    check,
   }
 });
